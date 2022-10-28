@@ -50,9 +50,6 @@ func Do(c *lemon.CLI, args []string) int {
 	var err error
 
 	switch c.Type {
-	case lemon.OPEN:
-		logger.Debug("Opening URL")
-		err = lc.Open(c.DataSource, c.TransLocalfile, c.TransLoopback)
 	case lemon.COPY:
 		logger.Debug("Copying text")
 		err = lc.Copy(c.DataSource)
@@ -63,14 +60,14 @@ func Do(c *lemon.CLI, args []string) int {
 		c.Out.Write([]byte(text))
 	case lemon.SERVER:
 		logger.Debug("Starting Server")
-		err = server.Serve(c, logger)
+		server.Serve(c, logger)
 	default:
 		panic("Unreachable code")
 	}
 
 	if err != nil {
 		writeError(c, err)
-		return lemon.RPCError
+		return lemon.HTTPError
 	}
 	return lemon.Success
 }

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"regexp"
-	"time"
 
 	"github.com/mitchellh/go-homedir"
 	"github.com/monochromegane/conflag"
@@ -26,9 +25,6 @@ func (c *CLI) FlagParse(args []string, skip bool) error {
 func (c *CLI) getCommandType(args []string) (s CommandStyle, err error) {
 	s = ALIAS
 	switch {
-	case regexp.MustCompile(`/?xdg-open$`).MatchString(args[0]):
-		c.Type = OPEN
-		return
 	case regexp.MustCompile(`/?pbpaste$`).MatchString(args[0]):
 		c.Type = PASTE
 		return
@@ -45,10 +41,6 @@ func (c *CLI) getCommandType(args []string) (s CommandStyle, err error) {
 	s = SUBCOMMAND
 	for i, v := range args[1:] {
 		switch v {
-		case "open":
-			c.Type = OPEN
-			del(i)
-			return
 		case "paste":
 			c.Type = PASTE
 			del(i)
@@ -70,14 +62,9 @@ func (c *CLI) getCommandType(args []string) (s CommandStyle, err error) {
 func (c *CLI) flags() *flag.FlagSet {
 	flags := flag.NewFlagSet("lemonade", flag.ContinueOnError)
 	flags.IntVar(&c.Port, "port", 2489, "TCP port number")
-	flags.StringVar(&c.Allow, "allow", "0.0.0.0/0,::/0", "Allow IP range")
 	flags.StringVar(&c.Host, "host", "localhost", "Destination host name.")
 	flags.BoolVar(&c.Help, "help", false, "Show this message")
-	flags.BoolVar(&c.TransLoopback, "trans-loopback", true, "Translate loopback address")
-	flags.BoolVar(&c.TransLocalfile, "trans-localfile", true, "Translate local file")
-	flags.StringVar(&c.LineEnding, "line-ending", "", "Convert Line Endings (CR/CRLF)")
-	flags.BoolVar(&c.NoFallbackMessages, "no-fallback-messages", false, "Do not show fallback messages")
-	flags.DurationVar(&c.Timeout, "rpc-timeout", 100*time.Millisecond, "RPC timeout")
+	flags.StringVar(&c.LineEnding, "line-ending", "CR", "Convert Line Endings (CR/CRLF)")
 	flags.IntVar(&c.LogLevel, "log-level", 1, "Log level")
 	return flags
 }

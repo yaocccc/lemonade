@@ -2,6 +2,18 @@
 Lemonade
 ========
 
+forked from lemonade-command/lemonade
+
+## **Why another lemonade fork?**
+
+lemonade-command/lemonade over TCP.
+
+yaocccc/lemonade over HTTP.
+
+**Sometimes, HTTP is easier to use than TCP.**
+
+------------
+
 remote...lemote...lemode......Lemonade!!! :lemon: :lemon:
 
 Lemonade is a remote utility tool.
@@ -50,7 +62,6 @@ Usage
 ```sh
 Usage: lemonade [options]... SUB_COMMAND [arg]
 Sub Commands:
-  open [URL]                  Open URL by browser
   copy [text]                 Copy text.
   paste                       Paste text.
   server                      Start lemonade server.
@@ -58,11 +69,7 @@ Sub Commands:
 Options:
   --port=2489                 TCP port number
   --line-ending               Convert Line Ending(CR/CRLF)
-  --allow="0.0.0.0/0,::/0"    Allow IP Range                [Server only]
   --host="localhost"          Destination hostname          [Client only]
-  --no-fallback-messages      Do not show fallback messages [Client only]
-  --trans-loopback=true       Translate loopback address    [open subcommand only]
-  --trans-localfile=true      Translate local file path     [open subcommand only]
   --help                      Show this message
 ```
 
@@ -99,12 +106,10 @@ There is configuration file at `~/.config/lemonade.toml`.
 
 ```toml
 port = 1234
-allow = '192.168.0.0/24'
 line-ending = 'crlf'
 ```
 
 - `port` is a listening port of TCP.
-- `allow` is a comma separated list of a allowed IP address(with CIDR block).
 
 
 ### Client
@@ -112,56 +117,17 @@ line-ending = 'crlf'
 ```toml
 port = 1234
 host = '192.168.x.x'
-trans-loopback = true
-trans-localfile = true
 line-ending = 'crlf'
 ```
 
 - `port` is a port of server.
 - `host` is a hostname of server.
-- `trans-loopback` is a flag of translation loopback address.
-- `trans-localfile` is a flag of translation localfile.
 
 Detail of `trans-loopback` and `trans-localfile` are described Advanced Usage.
 
 
 Advanced Usage
 -----------------
-
-
-### trans-loopback
-
-Default: true
-
-This option works with `open` command only.
-
-If this option is true, lemonade translates loopback address to address of client.
-
-For example, you input `lemonade open 'http://127.0.0.1:8000'`.
-If this option is false, server receives loopback address.
-But this isn't expected.
-Because, at server, loopback address is server itself.
-
-If this option is true, server receives IP address of client.
-So, server can open URL!
-
-
-### trans-localfile
-
-Default: true
-
-This option works with `open` command only.
-
-If this option is true, lemonade translates path of local file to address of client.
-
-For example, you input `lemonade open ./file.txt`.
-If this option is false, server receives `./file.txt`.
-But this isn't expected.
-Because, at server, `./file.txt` doesn't exist.
-
-If this option is true, server receives IP address of client. And client serve the local file.
-So, server can open the local file!
-
 
 ### line-ending
 

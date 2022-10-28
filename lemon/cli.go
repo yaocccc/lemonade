@@ -2,15 +2,13 @@ package lemon
 
 import (
 	"io"
-	"time"
 )
 
 type CommandType int
 
 // Commands
 const (
-	OPEN CommandType = iota + 1
-	COPY
+	COPY CommandType = iota + 1
 	PASTE
 	SERVER
 )
@@ -18,7 +16,7 @@ const (
 const (
 	Success        = 0
 	FlagParseError = iota + 10
-	RPCError
+	HTTPError
 	Help
 )
 
@@ -37,16 +35,10 @@ type CLI struct {
 	DataSource string
 
 	// options
-	Port           int
-	Allow          string
-	Host           string
-	TransLoopback  bool
-	TransLocalfile bool
-	LineEnding     string
-	LogLevel       int
-	Timeout        time.Duration
+	Port       int
+	Host       string
+	LineEnding string
+	LogLevel   int
 
 	Help bool
-
-	NoFallbackMessages bool
 }
